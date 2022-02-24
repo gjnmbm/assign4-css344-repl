@@ -13,10 +13,10 @@ A program with a pipeline of 3 threads that interact with each other as producer
 */
 
 // Size of the buffers
-#define SIZE 10
+#define SIZE 100
 
 // Number of items that will be produced. This number is less than the size of the buffer. Hence, we can model the buffer as being unbounded.
-#define NUM_ITEMS 6
+#define NUM_ITEMS 50
 
 // Buffer 1, shared resource between input thread and square-root thread
 char* buffer_1[SIZE];
@@ -51,10 +51,10 @@ Get input from the user.
 This function doesn't perform any error checking.
 */
 char* get_user_input(){
-  char* value;
+  char* value = malloc(SIZE);
   printf("Enter a string: ");
-  scanf("%s", &value); //This works
-  //fgets(&value, SIZE, stdin); //This does not
+  //scanf("%s", &value); //This works
+  fgets(value, SIZE, stdin); //I had to allocate space
   return value;
 }
 
@@ -86,7 +86,7 @@ void *get_input(void *args)
     {
       // Get the user input
       char* item = get_user_input();
-      put_buff_1(&item);
+      put_buff_1(item);
     }
     return NULL;
 }
