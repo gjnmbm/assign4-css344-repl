@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <math.h> // must link with -lm
+#include <string.h>
 
 /*
 A program with a pipeline of 3 threads that interact with each other as producers and consumers.
@@ -52,7 +53,7 @@ This function doesn't perform any error checking.
 */
 char* get_user_input(){
   char* value = malloc(SIZE);
-  printf("Enter a string: ");
+  //printf("Enter a string: ");
   //scanf("%s", &value); //This works
   fgets(value, SIZE, stdin); //I had to allocate space
   return value;
@@ -136,11 +137,14 @@ void put_buff_2(char* item){
 void *separate_line(void *args)
 {
     char* item;
-    char* square;
+    char* new_line;
+    char* saveptr;
     for (int i = 0; i < NUM_ITEMS; i++)
     {
       item = get_buff_1();
-      
+      //while (strtok_r(item, "\n", &saveptr) != NULL) {
+        
+      //}
       put_buff_2(item);
     }
     return NULL;
@@ -174,10 +178,15 @@ char* get_buff_2(){
 void *write_output(void *args)
 {
     char* item;
+    char* token;
+    char* saveptr;
     for (int i = 0; i < NUM_ITEMS; i++)
     {
       item = get_buff_2();
-      printf("\nOutput: %s\n", item);
+      //printf("\nOutput: %s\n", item);
+      token = strtok_r(item,"STOP",&saveptr);
+      printf("%s\n", token);
+      printf(" ");
     }
     return NULL;
 }
